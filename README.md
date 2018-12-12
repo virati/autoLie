@@ -1,4 +1,4 @@
-AutoLie
+# AutoLie
 
 A simple library that adds Lie derivatives and Lie brackets onto the Autograd library.
 
