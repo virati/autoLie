@@ -1,4 +1,4 @@
-# PyLie
+# autoLie
 
 A simple library for doing Lie derivatives and brackets using autograd-compatible functions
 
