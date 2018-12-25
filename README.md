@@ -9,4 +9,4 @@ Do the standard thing. Point yourselves towards the main file "lie_lib.py"
 ## Example
 Check out the example notebook
 
-
+![Example Directional Derivatives](snapshot.png)
