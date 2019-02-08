@@ -67,6 +67,9 @@ def L_dot(h,f,order=1):
     return np.sum(L_d(h,f,order=order))
 
 
+#%%
+# Plotting methods here
+
 def plot_LD(func):
     
     potgrid = func([x,y,z])
@@ -79,12 +82,18 @@ def plot_LD(func):
     
     obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=1,opacity=0.2)
 
-def plot_Ldot(func):
+def plot_Ldot(func,normed=True):
     x,y,z = gen_meshgrid(dens=20)
     
     potgrid = func([x,y,z])
-    obj = points3d(x, y, z, np.sum(potgrid,axis=0),scale_factor=0.01,opacity=1)
+    if normed:
+        obj = points3d(x, y, z, np.abs(np.log10(np.sum(potgrid,axis=0))),scale_factor=1,opacity=1)
+    else:
+        obj = points3d(x, y, z, (np.sum(potgrid,axis=0)),scale_factor=0.01,opacity=1)
 
+
+#%%
+# Our functions of interest HERE
     
 #if __name__ == '__main__':
 @operable
@@ -92,8 +101,9 @@ def f(x):
     #return np.array([-x[1],-x[0],-x[2] + x[1]])
     #return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
     #return np.array([-np.sin(x[1]), -5*x[0]**2, -np.sin(x[2] - x[1])])
-    return - np.array([(x[0])*(x[0]-2)*(x[0]+2),x[1]**2,x[2]**2])
-    #return -np.array([x[0]**2,x[1],x[2]])
+    #return - np.array([(x[0])*(x[0]-2)*(x[0]+2),x[1]**2,x[2]**2])
+    #return -np.array([x[0],x[1],x[2]])
+    return -np.array([np.sin(x[2]),np.sin(x[0]),np.sin(x[1])])
 
 @operable
 def g(x):
@@ -105,6 +115,11 @@ def h(x):
     return 2*x[0] + 3*x[2]
 
 
+
+#%%
+# Misc stuff here
+
+
 def gen_meshgrid(dens=20):
     x_ = np.linspace(-10,10,dens)
     y_ = np.linspace(-10,10,dens)
@@ -113,7 +128,23 @@ def gen_meshgrid(dens=20):
     x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
     
     return x,y,z
+    
+def plot_fields(dyn_field,ctrl_field,coords):
+    x = coords[0]
+    y = coords[1]
+    z = coords[2]
+    #This plots the dynamics field first
+    row_sums = dyn_field.sum(axis=0)
+    norm_dyn_field = dyn_field / row_sums
+    
+    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],dyn_field[1,:,:,:],dyn_field[2,:,:,:])
+    obj2 = quiver3d(x,y,z,ctrl_field[0,:,:,:],ctrl_field[1,:,:],ctrl_field[2,:,:])
+    
+    #plot_Ldot(y_dot)
 
+
+#%%
+#Specific examples here
 def vector_example():
     y_dot = L_d(g,f,order=1)
     
@@ -123,13 +154,12 @@ def vector_example():
     
     x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
     
+    coords = (x,y,z)
     
     dyn_field = f([x,y,z])
     ctrl_field = g([x,y,z])
     
-    #This plots the dynamics field first
-    obj = quiver3d(x,y,z,dyn_field[0,:,:,:],dyn_field[1,:,:,:],dyn_field[2,:,:,:])
-    obj2 = quiver3d(x,y,z,ctrl_field[0,:,:,:],ctrl_field[1,:,:],ctrl_field[2,:,:])
+    plot_fields(dyn_field,ctrl_field,coords)
     plot_Ldot(y_dot)
 
 def scalar_example():
@@ -150,3 +180,9 @@ def scalar_example():
     obj = quiver3d(x,y,z,dyn_field[0,:,:,:],dyn_field[1,:,:,:],dyn_field[2,:,:,:])
     obj2 = points3d(x,y,z,read_field[:,:,:],colormap='copper',scale_factor=0.01)
     plot_LD(y_dot)
+
+
+#%%
+    
+if __name__ == '__main__':
+    vector_example()
