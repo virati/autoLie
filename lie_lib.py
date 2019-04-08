@@ -113,19 +113,23 @@ def gen_meshgrid(dens=20):
     
     return x,y,z
     
-def plot_fields(dyn_field,ctrl_field,coords):
+def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
     x = coords[0]
     y = coords[1]
     z = coords[2]
     #This plots the dynamics field first
     row_sums = dyn_field.sum(axis=0)
-    norm_dyn_field = dyn_field / row_sums
+    if normfield:
+        norm_dyn_field = 100* dyn_field / row_sums
+    else:
+        norm_dyn_field = dyn_field
     
     dyn_field[np.isinf(dyn_field)] = np.nan
     norm_dyn_field[np.isinf(norm_dyn_field)] = np.nan
     
-    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],dyn_field[1,:,:,:],dyn_field[2,:,:,:])
-    obj2 = quiver3d(x,y,z,ctrl_field[0,:,:,:],ctrl_field[1,:,:],ctrl_field[2,:,:])
+    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:])
+    
+    obj2 = quiver3d(x,y,z,ctrl_field[0,:,:,:],ctrl_field[1,:,:],ctrl_field[2,:,:],opacity=0.1)
     
     #plot_Ldot(y_dot)
 

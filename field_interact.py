@@ -17,11 +17,11 @@ import pdb
 @operable
 def f(x):
     #return np.array([-x[1],-x[0],-x[2] + x[1]])
-    #return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
+    return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
     #return np.array([-np.sin(x[1]), -5*x[0]**2, -np.sin(x[2] - x[1])])
     #return - np.array([(x[0])*(x[0]-2)*(x[0]+2),x[1]**2,x[2]**2])
     #return -np.array([x[0],x[1],x[2]])
-    return -np.array([np.sin(x[2]),np.sin(x[0]),np.sin(x[1])])
+    #return -np.array([np.sin(x[2]),np.sin(x[0]),np.sin(x[1])])
     #return -np.array([x[0] + x[1], x[1]*x[2],x[2]**2])
 
 def f_net(x,D):
@@ -36,7 +36,8 @@ def f_net(x,D):
 @operable
 def g(x):
     #return np.sin(x + np.pi/2)
-    return np.array([np.sin(x[1]/10),np.cos(x[0]*x[1]),np.sin(x[2])])
+    #return np.array([np.sin(x[1]/10),np.cos(x[0]*x[1]),np.sin(x[2])])
+    return np.array([x[1],0*x[1],0*x[1]])
 
 @operable
 def h(x):
@@ -79,7 +80,8 @@ def vector_example():
     dyn_field = f([x,y,z])
     ctrl_field = g([x,y,z])
     
-    plot_fields(dyn_field,ctrl_field,coords)
+    #pdb.set_trace()
+    plot_fields(dyn_field,ctrl_field,coords,normfield=True)
     #plot_Ldot(y_dot)
 
 def scalar_example():
@@ -105,4 +107,4 @@ def scalar_example():
 #%%
     
 if __name__ == '__main__':
-    scalar_example()
+    vector_example()
