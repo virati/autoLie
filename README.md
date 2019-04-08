@@ -14,10 +14,10 @@ Below is a simple example using two vector-valued functions $f$ and $g$
 
 The vector fields are seen as quivers and the lie-derivative calculated at each point of the meshgrid is seen as spheres/point3d dots.
 
-![Example Directional Derivatives](snapshot.png)
+![Example Directional Derivatives](imgs/snapshot.png)
 
 Another example, this one with the rotational components of a dynamics field a little more apparent
 
-![Example rotational field](snapshot2.png)
+![Example rotational field](imgs/snapshot2.png)
 
 Check out example notebook [here]()
