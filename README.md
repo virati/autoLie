@@ -16,4 +16,8 @@ The vector fields are seen as quivers and the lie-derivative calculated at each 
 
 ![Example Directional Derivatives](snapshot.png)
 
+Another example, this one with the rotational components of a dynamics field a little more apparent
+
+![Example rotational field](snapshot2.png)
+
 Check out example notebook [here]()
