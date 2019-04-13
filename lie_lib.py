@@ -77,19 +77,25 @@ def L_dot(h,f,order=1):
 
 # this is so wrong; why am I taking a GRADIENT to find the time-domain fixed pt?
 # FIX THIS
-def f_points(f,args,epsilon=1e-1):
+def f_points(f,args,epsilon=1):
     
     if 'D' in args.keys():
-        grad_f = np.sum(egrad(f)([args['x'],args['y'],args['z']],args['D']),axis=0).squeeze()
+        grad_f = (f([args['x'],args['y'],args['z']],args['D']))
     else:
-        grad_f = np.sum(egrad(f)([args['x'],args['y'],args['z']]),axis=0).squeeze().astype(np.float)
+        grad_f = (f([args['x'],args['y'],args['z']]))
     
     
-    plt.figure()
-    plt.hist(grad_f.flatten(),bins=200)
+    middle_gf = np.abs(grad_f) <= epsilon
+    
+    output = middle_gf.all(axis=0)
+    #pdb.set_trace()
+    return output
+    
+    #plt.figure()
+    #plt.hist(grad_f.flatten(),bins=200)
     
     #pdb.set_trace()
-    return (np.abs(grad_f) <= epsilon).astype(np.int)
+    #return (np.abs(grad_f) <= epsilon).astype(np.int)
 
 #%%
 # Plotting methods here

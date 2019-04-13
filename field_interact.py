@@ -90,15 +90,13 @@ def network_example():
     zeros = f_points(f_net,args,z)
     fps = np.zeros(zeros.shape)
     fps[zeros == True] = 1
-    
 
-    #pdb.set_trace()
     plot_fields(dyn_field,ctrl_field,coords)
     #plot_Ldot(y_dot,D=D)
     fps_display = points3d(x,y,z,fps[:,:,:],colormap='seismic',scale_factor=0.5)
 
 def simple_dynamics_example():
-    use_func = f6
+    use_func = f5
     x_ = np.linspace(-10,10,20)
     y_ = np.linspace(-10,10,20)
     z_ = np.linspace(-10,10,20)
@@ -111,11 +109,11 @@ def simple_dynamics_example():
     plot_field(dyn_field,coords,normfield=False)
     
     args = {'x':x,'y':y,'z':z}
-    zeros = f_points(use_func,args)
+    zeros = f_points(use_func,args,epsilon=0.5)
     fps = np.zeros(zeros.shape)
     fps[zeros == True] = 1
-    
-    fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.5)
+
+    fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
 
 def vector_example():
     y_dot = L_d(g,f,order=1)
