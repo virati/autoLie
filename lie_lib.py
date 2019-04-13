@@ -88,11 +88,13 @@ def f_points(f,args,epsilon=1):
     middle_gf = np.abs(grad_f) <= epsilon
     
     output = middle_gf.all(axis=0)
+    
+    plt.figure()
+    plt.hist(np.abs(grad_f).flatten(),bins=20)
+    
     #pdb.set_trace()
     return output
     
-    #plt.figure()
-    #plt.hist(grad_f.flatten(),bins=200)
     
     #pdb.set_trace()
     #return (np.abs(grad_f) <= epsilon).astype(np.int)
@@ -155,7 +157,7 @@ def plot_field(dyn_field,coords,normfield=False):
     dyn_field[np.isinf(dyn_field)] = np.nan
     norm_dyn_field[np.isinf(norm_dyn_field)] = np.nan
     
-    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:])
+    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5)
     
 def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
     x = coords[0]

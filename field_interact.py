@@ -34,13 +34,21 @@ def f3(x):
 @operable
 def f4(x):
     return -np.array([x[0],x[1],x[2]])
-
+@operable
 def f5(x):
     return -np.array([np.sin(x[2]),np.sin(x[0]),np.sin(x[1])])
     #return -np.array([x[0] + x[1], x[1]*x[2],x[2]**2])
-
+@operable
 def f6(x):
     return -np.array([x[0],x[1],x[2]])
+
+@operable
+def f7(x):
+    return -np.array([x[0]**3 - 4*x[0]**2,x[2]**3 - 2*x[1]**2,x[1]**3 - 3*x[2]])
+
+@operable
+def f8(x):
+    return -np.array([x[1] * x[2],x[2] * (1.0 + x[1] - x[2]),x[1] * (-1.0 + x[2] + x[1])])
 
 class f_net:
     def __init__(self,D):
@@ -48,7 +56,6 @@ class f_net:
         
 @operable        
 def net_dyn(x,D):
-       
     new_x = np.swapaxes(np.array(x),0,2)
     D = np.array(D)
     a1 = np.dot(D.T,new_x)
@@ -67,36 +74,8 @@ def g(x):
 def h(x):
     return 2*x[0] + 3*x[2]
 
-def network_example():
-    y_dot = L_d(g,net_dyn,order=1)
-
-    G = nx.erdos_renyi_graph(3,p=0.9)
-    Dinc = nx.incidence_matrix(G).todense()
-    #pdb.set_trace()
-    
-    x_ = np.linspace(-10,10,20)
-    y_ = np.linspace(-10,10,20)
-    z_ = np.linspace(-10,10,20)
-    
-    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
-    
-    coords = (x,y,z)
-    
-    dyn_field = net_dyn([x,y,z],Dinc)
-    ctrl_field = g([x,y,z])
-    
-    #Check fixed points
-    args = {'x':x,'y':y,'z':z,'D':Dinc}
-    zeros = f_points(f_net,args,z)
-    fps = np.zeros(zeros.shape)
-    fps[zeros == True] = 1
-
-    plot_fields(dyn_field,ctrl_field,coords)
-    #plot_Ldot(y_dot,D=D)
-    fps_display = points3d(x,y,z,fps[:,:,:],colormap='seismic',scale_factor=0.5)
-
-def simple_dynamics_example():
-    use_func = f5
+def network_dynamics_example():
+    use_func = f7
     x_ = np.linspace(-10,10,20)
     y_ = np.linspace(-10,10,20)
     z_ = np.linspace(-10,10,20)
@@ -110,6 +89,26 @@ def simple_dynamics_example():
     
     args = {'x':x,'y':y,'z':z}
     zeros = f_points(use_func,args,epsilon=0.5)
+    fps = np.zeros(zeros.shape)
+    fps[zeros == True] = 1
+
+    fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
+
+def simple_dynamics_example():
+    use_func = f8
+    x_ = np.linspace(-10,10,20)
+    y_ = np.linspace(-10,10,20)
+    z_ = np.linspace(-10,10,20)
+    
+    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
+    
+    coords = (x,y,z)
+    
+    dyn_field = use_func([x,y,z])
+    plot_field(dyn_field,coords,normfield=False)
+    
+    args = {'x':x,'y':y,'z':z}
+    zeros = f_points(use_func,args,epsilon=2)
     fps = np.zeros(zeros.shape)
     fps[zeros == True] = 1
 
