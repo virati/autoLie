@@ -114,6 +114,20 @@ def simple_dynamics_example():
 
     fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
 
+def simple_trajectory():
+    x0 = np.array([0.0,0.0,0.0])
+    usefunc = f8
+    
+    x_next = [np.copy(x0)]
+    for ii in range(1000):
+        x_next.append(1/1000000*usefunc(x_next[-1]))
+        
+    x_next = np.array(x_next)
+    test = plot3d(x_next[:,0],x_next[:,1],x_next[:,2],tube_radius=0.02)
+    
+    plt.plot(x_next[:,2])
+    
+
 def vector_example():
     y_dot = L_d(g,f,order=1)
     
@@ -155,3 +169,4 @@ def scalar_example():
     
 if __name__ == '__main__':
     simple_dynamics_example()
+    simple_trajectory()
