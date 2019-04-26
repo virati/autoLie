@@ -25,6 +25,7 @@ from mayavi import mlab
 import pdb
 import matplotlib.pyplot as plt
 
+import mayavi
 from mayavi.mlab import *
 import sklearn.preprocessing as preproc
 
@@ -112,7 +113,7 @@ def plot_LD(func):
     for ii in range(3):
         potgrid[ii,:,:,:] = (potgrid[ii,:,:,:]) / 500 #(np.linalg.norm(potgrid[ii,:,:,:]))
     
-    obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=1,opacity=0.2)
+    obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=0.1,opacity=0.5)
 
 def plot_Ldot(func,D=[],normed=True):
     x,y,z = gen_meshgrid(dens=20)
@@ -143,7 +144,7 @@ def gen_meshgrid(dens=20):
     
     return x,y,z
 
-def plot_field(dyn_field,coords,normfield=False):
+def plot_field(dyn_field,coords,normfield=False,color=''):
     x = coords[0]
     y = coords[1]
     z = coords[2]
@@ -157,7 +158,11 @@ def plot_field(dyn_field,coords,normfield=False):
     dyn_field[np.isinf(dyn_field)] = np.nan
     norm_dyn_field[np.isinf(norm_dyn_field)] = np.nan
     
-    obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5)
+    if color == '':
+        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5)
+    else:
+            
+        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5,color=color)
     
 def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
     x = coords[0]
