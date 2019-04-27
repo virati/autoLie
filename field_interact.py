@@ -96,7 +96,7 @@ def network_dynamics_example():
 
 def simple_control_example():
     drift = f3
-    control = f3
+    control = f6
     
     #print('Dynamics: ' + )
     mayavi.mlab.figure(bgcolor=(0.0,0.0,0.0))
@@ -110,10 +110,10 @@ def simple_control_example():
     coords = (x,y,z)
     
     dyn_field = drift([x,y,z])
-    #plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
+    plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
     
     ctrl_field = control([x,y,z])
-    #plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
+    plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
     
     
     y_dot = L_dot(control,drift,order=1)
