@@ -95,8 +95,10 @@ def network_dynamics_example():
     fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
 
 def simple_control_example():
-    drift = f8
+    drift = f3
     control = f3
+    
+    #print('Dynamics: ' + )
     mayavi.mlab.figure(bgcolor=(0.0,0.0,0.0))
     
     x_ = np.linspace(-10,10,20)
@@ -108,14 +110,14 @@ def simple_control_example():
     coords = (x,y,z)
     
     dyn_field = drift([x,y,z])
-    plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
+    #plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
     
     ctrl_field = control([x,y,z])
-    plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
+    #plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
     
     
     y_dot = L_dot(control,drift,order=1)
-    plot_LD(y_dot)
+    plot_LD(y_dot,normalize=True)
 
 def simple_dynamics_example():
     use_func = f8

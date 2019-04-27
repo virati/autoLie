@@ -85,7 +85,6 @@ def f_points(f,args,epsilon=1):
     else:
         grad_f = (f([args['x'],args['y'],args['z']]))
     
-    
     middle_gf = np.abs(grad_f) <= epsilon
     
     output = middle_gf.all(axis=0)
@@ -102,7 +101,7 @@ def f_points(f,args,epsilon=1):
 
 #%%
 # Plotting methods here
-def plot_LD(func):
+def plot_LD(func,normalize=False):
     x,y,z = gen_meshgrid(dens=20)
     
     potgrid = func([x,y,z])
@@ -110,9 +109,19 @@ def plot_LD(func):
     #plt.figure()
     #plt.pcolormesh(X,Y)
     
-    for ii in range(3):
-        potgrid[ii,:,:,:] = (potgrid[ii,:,:,:]) / 500 #(np.linalg.norm(potgrid[ii,:,:,:]))
-    
+    if normalize:
+        for xx in range(20):
+            for yy in range(20):
+                for zz in range(20):
+                    potgrid[:,xx,yy,zz] = potgrid[:,xx,yy,zz] / np.linalg.norm(potgrid[:,xx,yy,zz])
+                    
+            #potgrid[ii,:,:,:] = (potgrid[ii,:,:,:]) / (np.linalg.norm(potgrid[ii,:,:,:]))
+            
+    else:
+        potgrid = potgrid / 500
+        
+    #pdb.set_trace()
+    potgrid = 10*potgrid
     obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=0.1,opacity=0.5)
 
 def plot_Ldot(func,D=[],normed=True):
