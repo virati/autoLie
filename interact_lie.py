@@ -73,13 +73,13 @@ class FieldModel(HasTraits):
 dphi = pi/1000.
 phi = arange(0.0, 2*pi + 0.5*dphi, dphi, 'd')
 
-def curve(c, n_long):
+def curve(c, d):
     x = np.linspace(-10,10,20)
     y = np.linspace(-10,10,20)
     z = np.linspace(-10,10,20)
     
     x,y,z = np.meshgrid(x,y,z,indexing='ij')
-    field = f8(x=[x,y,z],bifur=c)
+    field = f7(x=[x,y,z],bifur=[c,d])
     
     #t = sin(mu)
     return x, y, z, field
@@ -88,6 +88,7 @@ def curve(c, n_long):
 class MyModel(HasTraits):
     n_meridional    = Range(0, 30, 6, )#mode='spinner')
     n_longitudinal  = Range(0, 30, 11, )#mode='spinner')
+    n_opac = Range(0.0,1.0,0.5,)
 
     scene = Instance(MlabSceneModel, ())
 
@@ -96,21 +97,21 @@ class MyModel(HasTraits):
 
     # When the scene is activated, or when the parameters are changed, we
     # update the plot.
-    @on_trait_change('n_meridional,n_longitudinal,scene.activated')
+    @on_trait_change('n_meridional,n_longitudinal,n_opac,scene.activated')
     def update_plot(self):
         x, y, z, dyn = curve(self.n_meridional, self.n_longitudinal)
+        opac = self.n_opac
+        print(opac)
         if self.plot is None:
-            self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:])
-            
+            self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:],opacity=opac)
         else:
-            self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:])#scalars=t)
-
+            self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:],opacity=opac)
 
     # The layout of the dialog created
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
                      height=250, width=300, show_label=False),
                 Group(
-                        '_', 'n_meridional', 'n_longitudinal',
+                        '_', 'n_meridional', 'n_longitudinal','n_opac',
                      ),
                 resizable=True,
                 )

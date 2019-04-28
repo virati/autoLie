@@ -95,8 +95,8 @@ def network_dynamics_example():
     fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
 
 def simple_control_example():
-    drift = f3
-    control = f6
+    drift = f6
+    control = f8
     
     #print('Dynamics: ' + )
     mayavi.mlab.figure(bgcolor=(0.0,0.0,0.0))
@@ -150,7 +150,7 @@ def simple_trajectory():
     x_next = np.array(x_next)
     test = plot3d(x_next[:,0],x_next[:,1],x_next[:,2],tube_radius=0.02)
     
-    plt.plot(x_next[:,2])
+    #plt.plot(x_next[:,2])
     
 
 def vector_example():

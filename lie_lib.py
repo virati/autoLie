@@ -89,8 +89,8 @@ def f_points(f,args,epsilon=1):
     
     output = middle_gf.all(axis=0)
     
-    plt.figure()
-    plt.hist(np.abs(grad_f).flatten(),bins=20)
+    #plt.figure()
+    #plt.hist(np.abs(grad_f).flatten(),bins=20)
     
     #pdb.set_trace()
     return output
@@ -101,6 +101,7 @@ def f_points(f,args,epsilon=1):
 
 #%%
 # Plotting methods here
+# this here plots the potential grid arising from the function itself
 def plot_LD(func,normalize=False):
     x,y,z = gen_meshgrid(dens=20)
     
@@ -122,8 +123,9 @@ def plot_LD(func,normalize=False):
         
     #pdb.set_trace()
     potgrid = 10*potgrid
-    obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=0.1,opacity=0.5,color=(0.0,1.0,0.0))
+    obj = quiver3d(x, y, z, potgrid[0,:,:,:], potgrid[1,:,:,:], potgrid[2,:,:,:], line_width=3, scale_factor=0.1,opacity=0.2,color=(0.0,1.0,0.0))
 
+# here we find the lie for the Laplacian
 def plot_Ldot(func,D=[],normed=True):
     x,y,z = gen_meshgrid(dens=20)
     
@@ -168,10 +170,10 @@ def plot_field(dyn_field,coords,normfield=False,color=''):
     norm_dyn_field[np.isinf(norm_dyn_field)] = np.nan
     
     if color == '':
-        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5)
+        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.8)
     else:
             
-        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.5,color=color,mode='2dhooked_arrow')
+        obj = quiver3d(x,y,z,norm_dyn_field[0,:,:,:],norm_dyn_field[1,:,:,:],norm_dyn_field[2,:,:,:],opacity=0.8,color=color,mode='2dhooked_arrow')
     
 def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
     x = coords[0]
