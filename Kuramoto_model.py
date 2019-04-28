@@ -13,7 +13,7 @@ import numpy.random as rand
 
 from DBSpace import nestdict
 import networkx as nx
-from networkx_test import *
+from network_viz import *
 
 import pdb
 
@@ -184,11 +184,18 @@ class KNet(dyn_model):
             self.L = rand.rand(R*N,R*N)
         
     def plot_state_register(self):
-        plt.figure()
-        plt.plot(np.sin(np.array(self.state_register).squeeze()))
+        fig, ax1 = plt.subplots()
+        ax1.plot(self.tvect,np.sin(np.array(self.state_register).squeeze()))
+        
+        ax2 = ax1.twinx()
+        ax2.plot(self.tvect,self.Kt)
+        
+        #plt.figure()
+        #plt.plot(np.sin(np.array(self.state_register).squeeze()))
+        
 
 
-test_net = KNet(K=4)
+test_net = KNet(K=2)
 test_net.run()
 test_net.plot_state_register()
 end_state = np.sin(np.array(test_net.state_register[-1]))
