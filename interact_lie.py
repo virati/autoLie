@@ -101,7 +101,7 @@ class MyModel(HasTraits):
     def update_plot(self):
         x, y, z, dyn = curve(self.n_meridional, self.n_longitudinal)
         opac = self.n_opac
-        print(opac)
+        #print(opac)
         if self.plot is None:
             self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:],opacity=opac)
         else:
