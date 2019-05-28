@@ -73,27 +73,27 @@ class DEPRFieldModel(HasTraits):
 dphi = pi/1000.
 phi = arange(0.0, 2*pi + 0.5*dphi, dphi, 'd')
 
-def curve(c, d):
+def curve(f,c, d):
     x = np.linspace(-10,10,20)
     y = np.linspace(-10,10,20)
     z = np.linspace(-10,10,20)
     
     x,y,z = np.meshgrid(x,y,z,indexing='ij')
-    field = f7(x=[x,y,z],bifur=[c,d])
+    field = f(x=[x,y,z],bifur=[c,d])
     
     #t = sin(mu)
     return x, y, z, field
 
 def compute_path(f,bifur,x0=(1.,1.,1.)):
     x_roster = [x0]
-    for ii in range(100):
-        x_new = integrator(f7,x_roster[ii],bifur)
+    for ii in range(1000):
+        x_new = integrator(f,x_roster[ii],bifur)
         x_roster.append(x_new)
     
     return x_roster
 
 def integrator(f,state,bifur):
-    dt=0.001
+    dt=0.01
     k1 = f(state,bifur=bifur) * dt
     k2 = f(state + .5*k1,bifur=bifur)*dt
     k3 = f(state + .5*k2,bifur=bifur)*dt
@@ -113,21 +113,24 @@ class MyModel(HasTraits):
 
     plot = Instance(PipelineBase)
     plot2 = Instance(PipelineBase)
+    use_func=f7
 
     # When the scene is activated, or when the parameters are changed, we
     # update the plot.
     @on_trait_change('n_meridional,n_longitudinal,n_opac,scene.activated')
     def update_plot(self):
-        x, y, z, dyn = curve(self.n_meridional, self.n_longitudinal)
+        x, y, z, dyn = curve(f4,self.n_meridional, self.n_longitudinal)
         opac = self.n_opac
         #Recompute our trajectory
-        traj = np.array(compute_path(f7,(self.n_meridional, self.n_longitudinal)))
+        traj = np.array(compute_path(f4,(self.n_meridional, self.n_longitudinal)))
         #print(opac)
         
         #pdb.set_trace()
         if self.plot is None:
             self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:],opacity=opac)
-            self.plot2 = self.scene.mlab.plot3d(traj[:,0],traj[:,1],traj[:,2])#,scale_factor=0.01)
+            #self.plot2 = self.scene.mlab.plot3d(traj[:,0],traj[:,1],traj[:,2])#,scale_factor=0.01)
+            self.plot2 = self.scene.mlab.points3d(traj[:,0],traj[:,1],traj[:,2],mode='2darrow')#,scale_factor=0.01)
+
         else:
             self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:],opacity=opac)
             self.plot2.mlab_source.trait_set(x=traj[:,0],y=traj[:,1],z=traj[:,2])

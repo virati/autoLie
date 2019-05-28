@@ -10,28 +10,28 @@ import numpy as np
 from lie_lib import *
 
 @operable
-def f1(x):
+def f1(x,bifur=0):
     #return np.array([-x[1],-x[0],-x[2] + x[1]])
     return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
 
 @operable
-def f2(x):
+def f2(x,bifur=0):
     return np.array([-np.sin(x[1]), -5*x[0]**2, -np.sin(x[2] - x[1])])
 
 @operable
-def f3(x):
+def f3(x,bifur=0):
     return -np.array([(x[0])*(x[0]-2)*(x[0]+2),x[1]**2,x[2]**2])
 
-@operable
-def f4(x):
+#@operable
+def f4(x,bifur=0):
     return -np.array([x[0],x[1],x[2]])
-@operable
-def f5(x):
+#@operable
+def f5(x,bifur=0):
     return -np.array([np.sin(x[2]),np.sin(x[0]),np.sin(x[1])])
     #return -np.array([x[0] + x[1], x[1]*x[2],x[2]**2])
-@operable
-def f6(x):
-    return -np.array([x[0],x[1],x[2]])
+#@operable
+def f6(x,bifur=0):
+    return -np.array([bifur[0]*x[0],bifur[1]*x[1],x[2]])
 
 #@operable
 def f7(x,bifur):
