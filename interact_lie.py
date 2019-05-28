@@ -27,7 +27,7 @@ from dyn_lib import *
 from lie_lib import *
 
 
-class FieldModel(HasTraits):
+class DEPRFieldModel(HasTraits):
     n_meridional    = Range(0, 30, 6, )#mode='spinner')
     n_longitudinal  = Range(0, 30, 11, )#mode='spinner')
 
@@ -84,6 +84,25 @@ def curve(c, d):
     #t = sin(mu)
     return x, y, z, field
 
+def compute_path(f,bifur,x0=(1.,1.,1.)):
+    x_roster = [x0]
+    for ii in range(100):
+        x_new = integrator(f7,x_roster[ii],bifur)
+        x_roster.append(x_new)
+    
+    return x_roster
+
+def integrator(f,state,bifur):
+    dt=0.001
+    k1 = f(state,bifur=bifur) * dt
+    k2 = f(state + .5*k1,bifur=bifur)*dt
+    k3 = f(state + .5*k2,bifur=bifur)*dt
+    k4 = f(state + k3,bifur=bifur)*dt
+    
+    new_state = state + (k1 + 2*k2 + 2*k3 + k4)/6
+    #new_state += np.random.normal(0,10,new_state.shape) * dt
+    
+    return new_state
 
 class MyModel(HasTraits):
     n_meridional    = Range(0, 30, 6, )#mode='spinner')
@@ -93,7 +112,7 @@ class MyModel(HasTraits):
     scene = Instance(MlabSceneModel, ())
 
     plot = Instance(PipelineBase)
-
+    plot2 = Instance(PipelineBase)
 
     # When the scene is activated, or when the parameters are changed, we
     # update the plot.
@@ -101,12 +120,20 @@ class MyModel(HasTraits):
     def update_plot(self):
         x, y, z, dyn = curve(self.n_meridional, self.n_longitudinal)
         opac = self.n_opac
+        #Recompute our trajectory
+        traj = np.array(compute_path(f7,(self.n_meridional, self.n_longitudinal)))
         #print(opac)
+        
+        #pdb.set_trace()
         if self.plot is None:
             self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:],opacity=opac)
+            self.plot2 = self.scene.mlab.plot3d(traj[:,0],traj[:,1],traj[:,2])#,scale_factor=0.01)
         else:
             self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:],opacity=opac)
+            self.plot2.mlab_source.trait_set(x=traj[:,0],y=traj[:,1],z=traj[:,2])
 
+        
+        
     # The layout of the dialog created
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
                      height=250, width=300, show_label=False),

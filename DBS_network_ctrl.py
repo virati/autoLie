@@ -12,7 +12,6 @@ from lie_lib import *
 import networkx as nx
 import pdb
 
-
 @operable
 def f_hopf(x):
     x0_dot = -x[0] 
