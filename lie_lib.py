@@ -102,8 +102,8 @@ def f_points(f,args,epsilon=1):
 #%%
 # Plotting methods here
 # this here plots the potential grid arising from the function itself
-def plot_LD(func,normalize=False):
-    x,y,z = gen_meshgrid(dens=20)
+def plot_LD(func,normalize=False,dens=10):
+    x,y,z = gen_meshgrid(dens)
     
     potgrid = func([x,y,z])
     
@@ -111,9 +111,9 @@ def plot_LD(func,normalize=False):
     #plt.pcolormesh(X,Y)
     
     if normalize:
-        for xx in range(20):
-            for yy in range(20):
-                for zz in range(20):
+        for xx in range(dens):
+            for yy in range(dens):
+                for zz in range(dens):
                     potgrid[:,xx,yy,zz] = potgrid[:,xx,yy,zz] / np.linalg.norm(potgrid[:,xx,yy,zz])
                     
             #potgrid[ii,:,:,:] = (potgrid[ii,:,:,:]) / (np.linalg.norm(potgrid[ii,:,:,:]))
@@ -197,6 +197,7 @@ def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
 
 
 if __name__=='__main__':
+    
     plot_fields()
 #%%
 #Specific examples here

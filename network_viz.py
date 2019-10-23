@@ -4,6 +4,7 @@
 Created on Mon Apr 22 21:30:32 2019
 
 @author: virati
+An example of 
 """
 
 # needs mayavi2
@@ -49,6 +50,7 @@ plt.imshow(empir_var > 0.01)
 plt.subplot(212)
 plt.imshow(L)
 plt.title('True Laplacian')
+
 #%%
 def render_graph(H):
     # reorder nodes from 0,len(G)-1
@@ -75,5 +77,6 @@ def render_graph(H):
     mlab.pipeline.surface(tube, color=(0.8, 0.8, 0.8),opacity=0.1)
     
     mlab.savefig('mayavi2_spring.png')
-    mlab.show() # interactive window
+    #mlab.show() # interactive window
+    
 render_graph(H)

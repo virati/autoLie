@@ -4,7 +4,7 @@
 Created on Sat Apr 13 11:35:02 2019
 
 @author: virati
-The main file for large-scale network Lie analysis
+The main file for the Lie-algebra, neural network project with Jirsa Lab
 This is the big kahoona
 """
 
@@ -13,10 +13,11 @@ import networkx as nx
 import pdb
 
 @operable
-def f_hopf(x):
-    x0_dot = -x[0] 
-    x1_dot = 
-    x2_dot = 
+def f_hopf(p):
+    #Node-based dynamics done here
+    # c is a function of the network inputs into the node
+    r_dot = p[0] * (p[0] - self.c)
+    theta_dot = self.w * 1/(1-np.tanh(p[0]-self.c))
     
-    return np.array([x1_dot,x2_dot,x3_dot])
+    return np.array([r_dot,theta_dot])
 

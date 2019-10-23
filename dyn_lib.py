@@ -34,9 +34,13 @@ def f6(x,bifur=0):
     return -np.array([bifur[0]*x[0],bifur[1]*x[1],x[2]])
 
 #@operable
-def f7(x,bifur):
+def f7(x,bifur=[0,1]):
     return -np.array([x[0]**3 - bifur[0]*x[0]**2,x[2]**3 - 2*x[1]**2,x[1]**3 - bifur[1]*x[2]])
 
 #@operable
 def f8(x,bifur):
     return -np.array([x[1] * x[2],x[2] * (bifur[0] + x[1] - x[2]),x[1] * (-bifur[1] + x[2] + x[1])])
+
+@operable
+def f_main(x):
+    return np.array([[-x[0],-x[1]*x[0],0],[-x[1]*x[2],-x[1],0],[0,-x[0]*x[1],x[2]]])

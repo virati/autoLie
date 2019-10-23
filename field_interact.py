@@ -74,6 +74,7 @@ def g(x):
 def h(x):
     return 2*x[0] + 3*x[2]
 
+
 def network_dynamics_example():
     use_func = f7
     x_ = np.linspace(-10,10,20)
@@ -95,15 +96,15 @@ def network_dynamics_example():
     fps_display = points3d(x[zeros == True],y[zeros == True],z[zeros == True],colormap='seismic',scale_factor=0.2)
 
 def simple_control_example():
-    drift = f6
+    drift = f7
     control = f8
     
     #print('Dynamics: ' + )
     mayavi.mlab.figure(bgcolor=(0.0,0.0,0.0))
     
-    x_ = np.linspace(-10,10,20)
-    y_ = np.linspace(-10,10,20)
-    z_ = np.linspace(-10,10,20)
+    x_ = np.linspace(-10,10,10)
+    y_ = np.linspace(-10,10,10)
+    z_ = np.linspace(-10,10,10)
     
     x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
     
@@ -115,7 +116,7 @@ def simple_control_example():
     ctrl_field = control([x,y,z])
     plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
     
-    
+    #We do a Lie dot product
     y_dot = L_dot(control,drift,order=1)
     plot_LD(y_dot,normalize=True)
 
@@ -152,7 +153,6 @@ def simple_trajectory():
     
     #plt.plot(x_next[:,2])
     
-
 def vector_example():
     y_dot = L_d(g,f,order=1)
     
@@ -193,5 +193,9 @@ def scalar_example():
 #%%
     
 if __name__ == '__main__':
+    ## EXAMPLE 1
+    #simple_control_example()
+    #simple_trajectory()
+    
+    # EXAMPLE 2
     simple_control_example()
-    simple_trajectory()

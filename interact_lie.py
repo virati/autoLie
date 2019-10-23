@@ -113,16 +113,16 @@ class MyModel(HasTraits):
 
     plot = Instance(PipelineBase)
     plot2 = Instance(PipelineBase)
-    use_func=f7
+    use_func=f3
 
     # When the scene is activated, or when the parameters are changed, we
     # update the plot.
     @on_trait_change('n_meridional,n_longitudinal,n_opac,scene.activated')
     def update_plot(self):
-        x, y, z, dyn = curve(f4,self.n_meridional, self.n_longitudinal)
+        x, y, z, dyn = curve(self.use_func,self.n_meridional, self.n_longitudinal)
         opac = self.n_opac
         #Recompute our trajectory
-        traj = np.array(compute_path(f4,(self.n_meridional, self.n_longitudinal)))
+        traj = np.array(compute_path(self.use_func,(self.n_meridional, self.n_longitudinal)))
         #print(opac)
         
         #pdb.set_trace()
