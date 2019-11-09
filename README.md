@@ -40,4 +40,7 @@ Diving into dynamics can be difficult.
 Different types of dynamics can be visualized in different ways.
 We'll stick with 3d dynamics and start with a simple field
 
-![A linear field with no rotation](imgs/2.png)
+![A linear field with no rotation](imgs/f_field.png)
+
+Moving to something a bit more complicated, we'll focus on a field with rotational dynamics
+![A rotational field](imgs/2.png)
