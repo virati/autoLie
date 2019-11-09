@@ -79,7 +79,7 @@ def curve(f,c, d):
     z = np.linspace(-10,10,20)
     
     x,y,z = np.meshgrid(x,y,z,indexing='ij')
-    field = f(x=[x,y,z],bifur=[c,d])
+    field = f(x=np.array([x,y,z]))#bifur=[c,d])
     
     #t = sin(mu)
     return x, y, z, field

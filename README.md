@@ -25,3 +25,19 @@ Another example, this one with the rotational components of a dynamics field a l
 ![Example rotational field](imgs/snapshot2.png)
 
 Check out example notebook [here]()
+
+## Dynamics
+Dynaics is the study of change.
+Imagine standing somewhere in the city you live.
+Where are you going to be in one minute?
+
+Well, it depends.
+Where are you going?
+What's the quickest way to get there?
+What vehicle are you in?
+
+Diving into dynamics can be difficult.
+Different types of dynamics can be visualized in different ways.
+We'll stick with 3d dynamics and start with a simple field
+
+![A linear field with no rotation](imgs/2.png)
