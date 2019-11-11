@@ -79,7 +79,7 @@ def curve(f,c, d):
     z = np.linspace(-10,10,20)
     
     x,y,z = np.meshgrid(x,y,z,indexing='ij')
-    field = f([x,y,z])
+    field = f([x,y,z],bifur=(c,d))
     
     #t = sin(mu)
     return x, y, z, field
@@ -127,12 +127,12 @@ class MyModel(HasTraits):
         
         #pdb.set_trace()
         if self.plot is None:
-            self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:],opacity=opac)
+            self.plot = self.scene.mlab.quiver3d(x, y, z, dyn[0,:,:,:],dyn[1,:,:,:],dyn[2,:,:,:])
             #self.plot2 = self.scene.mlab.plot3d(traj[:,0],traj[:,1],traj[:,2])#,scale_factor=0.01)
             self.plot2 = self.scene.mlab.points3d(traj[:,0],traj[:,1],traj[:,2],mode='2darrow')#,scale_factor=0.01)
 
         else:
-            self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:],opacity=opac)
+            self.plot.mlab_source.trait_set(x=x, y=y, z=z, u=dyn[0,:,:,:],v=dyn[1,:,:,:],w=dyn[2,:,:,:])
             self.plot2.mlab_source.trait_set(x=traj[:,0],y=traj[:,1],z=traj[:,2])
 
         
