@@ -5,11 +5,12 @@ Created on Sat Apr 27 18:19:17 2019
 
 @author: virati
 Interactive gui for Lie fields
-"""
 
+Adapted from:
 # Author: Gael Varoquaux <gael.varoquaux@normalesup.org>
 # Copyright (c) 2008, Enthought, Inc.
 # License: BSD Style.
+"""
 
 import numpy as np
 
