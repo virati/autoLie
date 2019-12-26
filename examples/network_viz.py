@@ -77,6 +77,6 @@ def render_graph(H):
     mlab.pipeline.surface(tube, color=(0.8, 0.8, 0.8),opacity=0.1)
     
     mlab.savefig('mayavi2_spring.png')
-    #mlab.show() # interactive window
+    mlab.show() # interactive window
     
 render_graph(H)

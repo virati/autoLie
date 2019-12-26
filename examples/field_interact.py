@@ -119,6 +119,7 @@ def simple_control_example():
     #We do a Lie dot product
     y_dot = L_dot(control,drift,order=1)
     plot_LD(y_dot,normalize=True)
+    
 
 def simple_dynamics_example():
     use_func = f8
@@ -199,3 +200,4 @@ if __name__ == '__main__':
     
     # EXAMPLE 2
     simple_control_example()
+    mlab.show()
