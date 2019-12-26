@@ -15,7 +15,6 @@ Adapted from:
 import numpy as np
 
 from numpy import arange, pi, cos, sin
-
 from traits.api import HasTraits, Range, Instance, \
         on_trait_change
 from traitsui.api import View, Item, Group
@@ -23,7 +22,8 @@ from traitsui.api import View, Item, Group
 from mayavi.core.api import PipelineBase
 from mayavi.core.ui.api import MayaviScene, SceneEditor, \
                 MlabSceneModel
-
+import sys
+sys.path.append('../src')
 from dyn_lib import *
 from lie_lib import *
 
