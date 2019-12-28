@@ -6,7 +6,7 @@ Created on Sat Apr 27 19:00:17 2019
 @author: virati
 """
 
-import numpy as np
+import autograd.numpy as np
 from lie_lib import *
 
 @operable
@@ -14,7 +14,7 @@ def h1(x):
     return np.array([0.0,0.0,1.0]).T * x
 
 #@operable
-def f1(x,bifur=0):
+def f1(x):
     #return np.array([-x[1],-x[0],-x[2] + x[1]])
     return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
 
@@ -49,6 +49,9 @@ def f8(x,bifur=[0,0]):
 def f9(x):
     return -np.array([x[1] * x[2],x[2] * (x[1] - x[2]),x[1] * (x[2] + x[1])])
 
+
+def g1(x):
+    return np.array([x[0],0,0])
 
 @operable
 def f_main(x):

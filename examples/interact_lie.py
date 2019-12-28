@@ -4,13 +4,17 @@
 Created on Sat Apr 27 18:19:17 2019
 
 @author: virati
-Interactive gui for Lie fields
+This is a GUI INTERFACE to see how trajectories change with field parameter changes
+
 
 Adapted from:
 # Author: Gael Varoquaux <gael.varoquaux@normalesup.org>
 # Copyright (c) 2008, Enthought, Inc.
 # License: BSD Style.
 """
+import sys
+sys.path.append('../src')
+
 
 import numpy as np
 
@@ -22,8 +26,8 @@ from traitsui.api import View, Item, Group
 from mayavi.core.api import PipelineBase
 from mayavi.core.ui.api import MayaviScene, SceneEditor, \
                 MlabSceneModel
-import sys
-sys.path.append('../src')
+                
+import scipy.signal as sig
 from dyn_lib import *
 from lie_lib import *
 
@@ -85,12 +89,13 @@ def curve(f,c, d):
     #t = sin(mu)
     return x, y, z, field
 
-def compute_path(f,bifur,x0=(1.,1.,1.)):
+def compute_path(f,bifur,x0=(1.,1.,1.),blips=1000):
     x_roster = [x0]
-    for ii in range(1000):
+    for ii in range(blips):
         x_new = integrator(f,x_roster[ii],bifur)
         x_roster.append(x_new)
     
+   
     return x_roster
 
 def integrator(f,state,bifur):
@@ -108,7 +113,7 @@ def integrator(f,state,bifur):
 class MyModel(HasTraits):
     n_meridional    = Range(0, 30, 6, )#mode='spinner')
     n_longitudinal  = Range(0, 30, 11, )#mode='spinner')
-    n_opac = Range(0.0,1.0,0.5,)
+    n_opac = Range(1000,10000,1000,)
 
     scene = Instance(MlabSceneModel, ())
 
@@ -123,7 +128,7 @@ class MyModel(HasTraits):
         x, y, z, dyn = curve(f8,self.n_meridional, self.n_longitudinal)
         opac = self.n_opac
         #Recompute our trajectory
-        traj = np.array(compute_path(f8,(self.n_meridional, self.n_longitudinal)))
+        traj = np.array(compute_path(f8,(self.n_meridional, self.n_longitudinal),blips=opac))
         #print(opac)
         
         #pdb.set_trace()

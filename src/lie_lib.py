@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 import mayavi
 from mayavi.mlab import *
 import sklearn.preprocessing as preproc
-
+from dyn_lib import *
 
 import operator
 
@@ -60,11 +60,13 @@ for name, op in [(name, getattr(operator, name)) for name in dir(operator) if "_
 ##
 # The Lie Magic goes here!
 def L_bracket(f,g):
-    c = operable(jcb(f)) * g
-    cinv = operable(jcb(g)) * f
-    print(c(np.array([1.,1.,1.])))
-    print(cinv(np.array([1.,1.,1.])))
-#L_bracket(f,g)
+    cf = np.dot(operable(jcb(f)),g)
+    cb = np.dot(operable(jcb(g)),f)
+    #cf = L_d(f,g)
+    #cb = L_d(g,f)
+    #print(c(np.array([1.,1.,1.])))
+    #print(cinv(np.array([1.,1.,1.])))
+    return cf,cb
 
 def L_d(h,f,order=1):
     c = [h]
@@ -197,7 +199,13 @@ def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
 
 
 if __name__=='__main__':
+    x_interest = np.array([1.0,-5.0,3.0]).T
+    b1,b2 = L_bracket(f1,g1)
+    print((b1(x_interest) - b2(x_interest)))
     
-    plot_fields()
+    #test = L_d(h1,f1)
+    #print(test(x_interest))
+    
+    #plot_fields()
 #%%
 #Specific examples here

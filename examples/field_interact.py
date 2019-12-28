@@ -7,11 +7,14 @@ Created on Fri Feb 15 08:40:29 2019
 Vineet Tiruvadi
 virati@gmail.com
 
+This is a script for LIE ANALYSIS of drift and control dynamics
 Run scripts with specific functions for dynamics/control and plotting
 """
 
 #%%
 # Our functions of interest HERE
+import sys
+sys.path.append('../src')
 
 from lie_lib import *
 import networkx as nx
