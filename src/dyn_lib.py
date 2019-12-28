@@ -7,13 +7,13 @@ Created on Sat Apr 27 19:00:17 2019
 """
 
 import autograd.numpy as np
-from lie_lib import *
+from op_plus import *
 
 @operable
 def h1(x):
     return np.array([0.0,0.0,1.0]).T * x
 
-#@operable
+@operable
 def f1(x):
     #return np.array([-x[1],-x[0],-x[2] + x[1]])
     return np.array([-x[1]**2 + x[2],-x[0]**3,-x[2]**2 + x[1]])
@@ -51,7 +51,7 @@ def f9(x):
 
 
 def g1(x):
-    return np.array([x[0],0,0])
+    return np.array([x[0],0,x[1]])
 
 @operable
 def f_main(x):
