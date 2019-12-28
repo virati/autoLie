@@ -78,7 +78,8 @@ class control_system(dyn_system):
         b1,b2 = L_bracket(f_kura,Xi)
         x_state = self.x_state
         #ipdb.set_trace()
-        test = b1(x_state,self.D)
+        test = b1(x_state,self.D) #THIS is where the problem is arising, when we're actually COMPUTING, it doesn't focus just on the first argument
+        
 
     def laplac(self):
         return nx.linalg.laplacian_matrix(self.G).todense()
