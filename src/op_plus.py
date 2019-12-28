@@ -11,14 +11,14 @@ import operator
 class operable:
     def __init__(self, f):
         self.f = f
-    def __call__(self, x):
-        return self.f(x)
+    def __call__(self, x,args):
+        return self.f(x,args)
  
 # Convert oeprators to the corresponding function
 def op_to_function_op(op):
     def function_op(self, operand):
-        def f(x):
-            return op(self(x), operand(x))
+        def f(x,args):
+            return op(self(x,args), operand(x,args))
         return operable(f)
     return function_op
  

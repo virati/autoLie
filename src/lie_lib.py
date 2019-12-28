@@ -81,7 +81,7 @@ if __name__=='__main__':
     x_interest = np.array([1.0,-2.0,3.0]).T
     b1,b2 = L_bracket(f1,g1)
     #print(b1(x_interest) - b2(x_interest))
-    print(np.sum(b1(x_interest) - b2(x_interest),axis=1))
+    print(np.sum(b1(x_interest,0) - b2(x_interest,0),axis=1))
     #print((b1(x_interest)))
     
     #test = L_d(h1,f1)

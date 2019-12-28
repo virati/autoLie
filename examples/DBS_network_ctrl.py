@@ -14,6 +14,7 @@ sys.path.append('../src/')
 from lie_lib import *
 import networkx as nx
 import ipdb
+import autograd.numpy as np
 
 ''' First, we'll define the functions we're interested in '''
 def integrator(f,state,params):
@@ -69,14 +70,19 @@ class control_system(dyn_system):
         self.P = self.L
         
         self.x_state = np.random.uniform(size=(1000,1))
+        
+        self.n_regions = n_regions
+        self.n_symp = n_symp
     
     def disease_control(self):
-        res,resinv = L_bracket(self.f_drift,self.Xi)
+        b1,b2 = L_bracket(f_kura,Xi)
         x_state = self.x_state
         
-        bracket_res = op_to_function_op(res) # - op_to_function_op(resinv)(x_state,self.P)
-        print(bracket_res)
+        test = b1(x_state,[self.P])
         
+def Xi(x,P):
+    return np.dot(np.random.randint(0,1,size=(self.n_regions,self.n_symp)),x)
+
 # We first care about the drift dynamics
 #@operable
 def f_hopf(x,P):
