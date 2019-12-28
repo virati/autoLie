@@ -28,8 +28,8 @@ npr.seed(1)
         
 # The Lie Magic goes here!
 def L_bracket(f,g,pt=[]):
-    cf = np.dot(operable(jcb(f)),g)
-    cb = np.dot(operable(jcb(g)),f)
+    cf = np.dot(operable(jcb(f,0)),g)
+    cb = np.dot(operable(jcb(g,0)),f)
     #cf = df_h(f,g)
     #cb = df_h(g,f)
     #print(c(np.array([1.,1.,1.])))
@@ -42,10 +42,12 @@ def L_bracket(f,g,pt=[]):
 def L_d(h,f,order=1):
     c = [h]
     for ii in range(order):
-        c.append(np.dot(operable(egrad(c[ii])),f))
+        c.append(np.dot(operable(egrad(c[ii],0)),f))
     
     return c[-1]
 
+
+#%%
 def L_dot(h,f,order=1):
     return np.sum(L_d(h,f,order=order))
 
@@ -67,11 +69,6 @@ def f_points(f,args,epsilon=1):
     
     #pdb.set_trace()
     return output
-    
-    
-    #pdb.set_trace()
-    #return (np.abs(grad_f) <= epsilon).astype(np.int)
-
 
 
 #%%

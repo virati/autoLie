@@ -11,7 +11,7 @@ import operator
 class operable:
     def __init__(self, f):
         self.f = f
-    def __call__(self, x,args):
+    def __call__(self,x,args):
         return self.f(x,args)
  
 # Convert oeprators to the corresponding function

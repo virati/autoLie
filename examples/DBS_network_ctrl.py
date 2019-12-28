@@ -77,9 +77,12 @@ class control_system(dyn_system):
     def disease_control(self):
         b1,b2 = L_bracket(f_kura,Xi)
         x_state = self.x_state
-        
-        test = b1(x_state,[self.P])
-        
+        #ipdb.set_trace()
+        test = b1(x_state,self.D)
+
+    def laplac(self):
+        return nx.linalg.laplacian_matrix(self.G).todense()
+
 def Xi(x,P):
     return np.dot(np.random.randint(0,1,size=(self.n_regions,self.n_symp)),x)
 
@@ -107,10 +110,12 @@ def f_consensus(x,P):
     return x_dot
 
 def f_kura(x,P):
-    D = P[0]
-    x_dot = -np.dot(np.sin(np.dot(x,D)),D.T)
+    D = P
+    x_1 = np.dot(D.T,x)
+    x_2 = np.sin(x_1)
+    x_3 = np.dot(D,x_2)
     
-    return x_dot
+    return x_3
     
 def g_mono(x,P):
     ret_vec = np.zeros_like(x)
