@@ -75,6 +75,7 @@ class control_system(dyn_system):
         self.n_symp = n_symp
     
     def disease_control(self):
+        ipdb.set_trace()
         b1,b2 = L_bracket(f_kura,Xi)
         x_state = self.x_state
         #ipdb.set_trace()

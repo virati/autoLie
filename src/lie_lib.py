@@ -27,17 +27,17 @@ import pdb
 npr.seed(1)
         
 # The Lie Magic goes here!
-def L_bracket(f,g,pt=[]):
+def L_bracket(f,g,args=[]):
     cf = np.dot(operable(jcb(f,0)),g)
     cb = np.dot(operable(jcb(g,0)),f)
     #cf = df_h(f,g)
     #cb = df_h(g,f)
     #print(c(np.array([1.,1.,1.])))
     #print(cinv(np.array([1.,1.,1.])))
-    if pt == []:
+    if args == []:
         return cf,cb
     else:
-        return np.sum(cf(pt) - cb(pt),axis=0)
+        return np.sum(cf(args[0],args[1]) - cb(args[0],args[1]),axis=0)
 
 def L_d(h,f,order=1):
     c = [h]
