@@ -77,12 +77,12 @@ class control_system(dyn_system):
         self.n_elements = n_elements
     
     def disease_measure(self):
-        self.interact_vector = L_d(self.Xi,self.h)
+        self.interact_vector = L_d(self.h,self.Xi)
         rand_checks = np.random.uniform(-10,10,size=(self.n_elements,self.n_elements))
         is_zero = []
         measure_sets = []
         for ii in range(self.n_elements):
-            measure_sets.append(self.interact_vector(rand_checks[ii,:].reshape(1,-1),[1]))
+            measure_sets.append(self.interact_vector(rand_checks[ii,:].squeeze(),[1]))
             is_zero.append(measure_sets[-1] == 0)
             #print(measure_set)
         
@@ -92,12 +92,12 @@ class control_system(dyn_system):
                                    
     ''' The main result from our ability to control the disease state through g'''
     def disease_control(self):
-        self.interact_vector = L_d(self.Xi,self.g_ctrl)
+        self.interact_vector = L_d(self.g_ctrl,self.Xi)
         #choose N random vectors in the N dim space
         rand_checks = np.random.uniform(-10,10,size=(self.n_elements,self.n_elements))
         is_zero = []
         for ii in range(self.n_elements):
-            control_set = self.interact_vector(rand_checks[ii,:].reshape(1,-1),[1])
+            control_set = self.interact_vector(rand_checks[ii,:].squeeze(),[1])
             is_zero.append(control_set == 0)
             #print(control_set)
         
@@ -125,7 +125,7 @@ class control_system(dyn_system):
         return nx.linalg.laplacian_matrix(self.G).todense()
 
 def Xi(x,P):
-    return np.dot(np.array([0.0,1.0,0.0,-0.0,0.,0.,0.,0.,0.0,0.0]).reshape(1,-1),x.T)
+    return np.dot(np.array([1.0,0.0,0.0,-0.0,0.,0.,0.,0.,0.0,0.0]).squeeze(),x.T)
     #return np.dot(np.random.randint(0,1,size=(10,P[0])),x)
 
 # We first care about the drift dynamics
@@ -160,15 +160,18 @@ def f_kura(x,P):
     return x_3
     
 def g_mono(x,P):
-    ret_vec = np.zeros_like(x)
-    ret_vec[0,0] = -x[0,0]
-    ret_vec[0,8] = -x[0,2]
+    test = np.zeros(shape=(x.shape[0],x.shape[0]))
+    test[8,8] = 1.3
+    ret_vec = np.dot(test,x)
+    #ret_vec[0,0] = -x[0,0]
+    #ret_vec[0,8] = -x[0,2]
     #ret_vec[0,8] = x[0,1] - x[0,5]**2
+    #ret_vec[5] = x[0]
     return ret_vec
 
 def h_single(x,P):
     measure_vect = np.zeros_like(x)
-    measure_vect[0,7] = 1.0
+    measure_vect[6] = 1.0
     return np.dot(measure_vect.T,x)
 
 def u_step(t,P):
