@@ -40,10 +40,10 @@ def L_bracket(f,g,args=[]):
         return np.sum(cf(args[0],args[1]) - cb(args[0],args[1]),axis=0)
 
 ''' The Lie Derivative is here
-This takes the derivative of g ALONG f
+This takes the gradient of d and dots it with f; with is technically L_f(d)
 '''
-def L_d(g,f,order=1):
-    c = [g]
+def L_d(d,f,order=1):
+    c = [d]
     for ii in range(order):
         c.append(np.dot(operable(egrad(c[ii],0)),f))
     
