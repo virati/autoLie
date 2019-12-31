@@ -14,7 +14,7 @@ class operable:
     def __call__(self,x,args):
         return self.f(x,args)
  
-# Convert oeprators to the corresponding function
+# Convert operators to the corresponding function
 def op_to_function_op(op):
     def function_op(self, operand):
         def f(x,args):

@@ -12,15 +12,6 @@ import mayavi
 from mayavi import mlab
 from mayavi.mlab import *
 
-def gen_meshgrid(dens=20):
-    x_ = np.linspace(-10,10,dens)
-    y_ = np.linspace(-10,10,dens)
-    z_ = np.linspace(-10,10,dens)
-    
-    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
-    
-    return x,y,z
-
 def plot_field(dyn_field,coords,normfield=False,color=''):
     x = coords[0]
     y = coords[1]

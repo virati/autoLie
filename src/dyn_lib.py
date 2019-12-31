@@ -10,7 +10,7 @@ import autograd.numpy as np
 from op_plus import *
 
 @operable
-def h1(x):
+def h1(x,args):
     return np.array([0.0,0.0,1.0]).T * x
 
 @operable

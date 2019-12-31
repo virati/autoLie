@@ -39,8 +39,11 @@ def L_bracket(f,g,args=[]):
     else:
         return np.sum(cf(args[0],args[1]) - cb(args[0],args[1]),axis=0)
 
-def L_d(h,f,order=1):
-    c = [h]
+''' The Lie Derivative is here
+This takes the derivative of g ALONG f
+'''
+def L_d(g,f,order=1):
+    c = [g]
     for ii in range(order):
         c.append(np.dot(operable(egrad(c[ii],0)),f))
     
@@ -74,16 +77,35 @@ def f_points(f,args,epsilon=1):
 #%%
 # Misc stuff here
 
+def gen_meshgrid(dens=20):
+    x_ = np.linspace(-10,10,dens)
+    y_ = np.linspace(-10,10,dens)
+    z_ = np.linspace(-10,10,dens)
+    
+    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
+    
+    return x,y,z
+
+def gen_arbgrid(dims=4,dens=20):
+    X = np.array([np.linspace(-10,10,dens) for aa in np.arange(dims)])
+    grid = np.meshgrid(X,indexing='ij')
+    
+    return grid
+
+
+#%% Unit test
 if __name__=='__main__':
     x_interest = np.array([1.0,-2.0,3.0]).T
+    test = L_d(h1,f1)
+    print(test(x_interest,0))
+    
+    
     b1,b2 = L_bracket(f1,g1)
     #print(b1(x_interest) - b2(x_interest))
     print(np.sum(b1(x_interest,0) - b2(x_interest,0),axis=1))
     #print((b1(x_interest)))
     
-    #test = L_d(h1,f1)
-    #print(test(x_interest))
-    
+    #
     #plot_fields()
 #%%
 #Specific examples here

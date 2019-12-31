@@ -53,10 +53,9 @@ class control_system(dyn_system):
         self.g_ctrl = g_mono
         self.u = u_step
         
-        
         #set our graph
-        n_elements = 1000
-        n_regions = int(np.floor(n_elements/10))
+        n_elements = 10
+        n_regions = int(np.floor(n_elements/2))
         self.G = nx.random_regular_graph(4, n_elements)
         self.L = nx.linalg.laplacian_matrix(self.G).todense()
         self.D = nx.linalg.incidence_matrix(self.G).todense()
@@ -64,8 +63,9 @@ class control_system(dyn_system):
         self.e_to_r = np.random.randint(0,n_regions,size=n_elements)
         
         #do our disease layer
-        n_symp = 5
-        self.Xi = np.random.randint(0,1,size=(n_regions,n_symp))
+        n_symp = 2
+        #self.Xi = np.random.randint(0,1,size=(n_regions,n_symp))
+        self.Xi = Xi
         
         self.P = self.L
         
@@ -73,20 +73,45 @@ class control_system(dyn_system):
         
         self.n_regions = n_regions
         self.n_symp = n_symp
+        self.n_elements = n_elements
     
+    ''' The main result from our ability to control the disease state through g'''
     def disease_control(self):
-        ipdb.set_trace()
+        self.interact_vector = L_d(self.Xi,self.g_ctrl)
+        #choose N random vectors in the N dim space
+        rand_checks = np.random.uniform(-10,10,size=(self.n_elements,self.n_elements))
+        is_zero = []
+        for ii in range(self.n_elements):
+            control_set = self.interact_vector(rand_checks[ii,:].reshape(1,-1),[1])
+            is_zero.append(control_set == 0)
+            print(control_set)
+        
+        print(is_zero)
+        #need to check if this is zero *everywhere*
+        #We'll multiply the above by the x vector, then check if the gradient is zero
+        #grid = gen_arbgrid(dims=5)
+        
+        
+        #controlset = self.interact_vector(grid,[1])
+        
+        #return controlset == nullset
+    
+    ''' Below isn't necessary for ASSFN project'''
+    def disease_bracket(self):
+        #ipdb.set_trace()
         b1,b2 = L_bracket(f_kura,Xi)
         x_state = self.x_state
-        #ipdb.set_trace()
-        test = b1(x_state,self.D) #THIS is where the problem is arising, when we're actually COMPUTING, it doesn't focus just on the first argument
         
-
+        test = op_to_function_op(b1) #THIS is where the problem is arising, when we're actually COMPUTING, it doesn't focus just on the first argument
+        
+        print(test)
+        
     def laplac(self):
         return nx.linalg.laplacian_matrix(self.G).todense()
 
 def Xi(x,P):
-    return np.dot(np.random.randint(0,1,size=(self.n_regions,self.n_symp)),x)
+    return np.dot(np.array([1.0,0.0,3.0,-2.0,0.,0.,0.,0.,1.0,0.0]).reshape(1,-1),x.T)
+    #return np.dot(np.random.randint(0,1,size=(10,P[0])),x)
 
 # We first care about the drift dynamics
 #@operable
@@ -121,12 +146,16 @@ def f_kura(x,P):
     
 def g_mono(x,P):
     ret_vec = np.zeros_like(x)
-    ret_vec[0] = -x[0]
+    ret_vec[0,0] = -x[0,0]
+    ret_vec[0,1] = -x[0,2]
+    #ret_vec[0,8] = x[0,1] - x[0,5]**2
     return ret_vec
 
 def u_step(t,P):
     return (t > 5).astype(np.float)
 
+#%% Script running code
+    
 if __name__=='__main__':
     
     brain = control_system()
