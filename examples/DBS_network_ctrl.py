@@ -66,7 +66,7 @@ class control_system(dyn_system):
         #do our disease layer
         n_symp = 2
         #self.Xi = np.random.randint(0,1,size=(n_regions,n_symp))
-        self.Xi = Xi
+        self.Xi = Xi_1
         
         self.P = self.L
         
@@ -77,31 +77,49 @@ class control_system(dyn_system):
         self.n_elements = n_elements
     
     def disease_measure(self):
-        self.interact_vector = L_d(self.h,self.Xi)
+        h_grad = egrad(self.h)
+        Xi_grad = egrad(self.Xi)
+        
+        self.interact_vector = L_dot(self.h,self.Xi)
         rand_checks = np.random.uniform(-10,10,size=(self.n_elements,self.n_elements))
         is_zero = []
         measure_sets = []
+        new_measure_sets = []
         for ii in range(self.n_elements):
-            measure_sets.append(self.interact_vector(rand_checks[ii,:].squeeze(),[1]))
-            is_zero.append(measure_sets[-1] == 0)
+            measure_sets.append(self.interact_vector(rand_checks[ii,:].squeeze(),[0])[0])
+            
             #print(measure_set)
         
+            new_measure_sets.append(np.dot(h_grad(rand_checks[ii,:],0),self.Xi(rand_checks[ii,:],0)))
+            is_zero.append(new_measure_sets[-1] == 0)
         #pdb.set_trace()
-        print('Measurement-Disease interaction: ' + str(np.array(is_zero).all() == True))
+        print('Measurement-Disease interaction is zero: ' + str(np.array(is_zero).all() == True))
+        self.measure_sets = new_measure_sets
+        self.measure_pts = rand_checks   
         
-                                   
+                           
     ''' The main result from our ability to control the disease state through g'''
     def disease_control(self):
+        Xi_grad = egrad(self.Xi)
+        g_grad = egrad(self.g_ctrl)
+        
+        #
         self.interact_vector = L_d(self.g_ctrl,self.Xi)
         #choose N random vectors in the N dim space
         rand_checks = np.random.uniform(-10,10,size=(self.n_elements,self.n_elements))
         is_zero = []
+        control_sets = []
+        new_control_sets = []
         for ii in range(self.n_elements):
-            control_set = self.interact_vector(rand_checks[ii,:].squeeze(),[1])
-            is_zero.append(control_set == 0)
+            control_sets.append(np.sum(self.interact_vector(rand_checks[ii,:].squeeze(),[0]),axis=0))
+            
+            
+            new_control_sets.append(np.dot(g_grad(rand_checks[ii,:],0),self.Xi(rand_checks[ii,:],0)))
+            is_zero.append(new_control_sets[-1] == 0)
             #print(control_set)
         
-        print('Control-Disease interaction: ' + str(np.array(is_zero).all() == True))
+        print('Control-Disease interaction is zero: ' + str(np.array(is_zero).all() == True))
+        self.control_sets = new_control_sets
         #need to check if this is zero *everywhere*
         #We'll multiply the above by the x vector, then check if the gradient is zero
         #grid = gen_arbgrid(dims=5)
@@ -124,9 +142,25 @@ class control_system(dyn_system):
     def laplac(self):
         return nx.linalg.laplacian_matrix(self.G).todense()
 
-def Xi(x,P):
-    return np.dot(np.array([1.0,0.0,0.0,-0.0,0.,0.,0.,0.,0.0,0.0]).squeeze(),x.T)
+def Xi_1(x,P):
+    return np.array([0.0,0.0,0.0,0.0,0.,0.,0.,0.,0,1.0 * x[9]])
+    
     #return np.dot(np.random.randint(0,1,size=(10,P[0])),x)
+
+def h_single(x,P):
+    measure_vect = np.zeros_like(x)
+    measure_vect[3] = 1.0
+    return np.dot(measure_vect.T,x)
+
+def g_mono(x,P):
+    test = np.zeros(shape=(x.shape[0],x.shape[0]))
+    resid = np.zeros(shape=x.shape)
+    test[9,9] = 1.0
+    ret_vec = np.dot(test,x) + resid
+    
+    return ret_vec
+
+#%%
 
 # We first care about the drift dynamics
 #@operable
@@ -158,21 +192,7 @@ def f_kura(x,P):
     x_3 = np.dot(D,x_2)
     
     return x_3
-    
-def g_mono(x,P):
-    test = np.zeros(shape=(x.shape[0],x.shape[0]))
-    test[8,8] = 1.3
-    ret_vec = np.dot(test,x)
-    #ret_vec[0,0] = -x[0,0]
-    #ret_vec[0,8] = -x[0,2]
-    #ret_vec[0,8] = x[0,1] - x[0,5]**2
-    #ret_vec[5] = x[0]
-    return ret_vec
 
-def h_single(x,P):
-    measure_vect = np.zeros_like(x)
-    measure_vect[6] = 1.0
-    return np.dot(measure_vect.T,x)
 
 def u_step(t,P):
     return (t > 5).astype(np.float)

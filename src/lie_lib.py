@@ -44,11 +44,12 @@ The Lie Derivative is here
 This takes the gradient of d and dots it with f; with is technically L_f(d)
 '''
 def L_d(d,f,order=1):
-    c = [d]
+    d = [d]
     for ii in range(order):
-        c.append(np.dot(operable(egrad(c[ii],0)),f))
+        #d.append(np.dot(operable(egrad(c[ii],0)),f))
+        d.append(np.dot(np.sum(operable(jcb(d[ii])),axis=0),f))
     
-    return c[-1]
+    return d[-1]
 
 
 #%%
