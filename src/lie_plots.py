@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import mayavi
 from mayavi import mlab
 from mayavi.mlab import *
+import autograd.numpy as np
 
 def plot_field(dyn_field,coords,normfield=False,color=''):
     x = coords[0]

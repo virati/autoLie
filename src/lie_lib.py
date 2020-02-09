@@ -47,12 +47,12 @@ def L_d(d,f,order=1):
     d = [d]
     for ii in range(order):
         #d.append(np.dot(operable(egrad(c[ii],0)),f))
-        d.append(np.dot(np.sum(operable(jcb(d[ii])),axis=0),f))
+        d.append(np.dot(operable(egrad(d[ii])),f))
     
     return d[-1]
 
 
-#%%
+#%% UNCLEAR USAGE BELOW
 def L_dot(h,f,order=1):
     return np.sum(L_d(h,f,order=order))
 
@@ -103,11 +103,6 @@ if __name__=='__main__':
     
     
     b1,b2 = L_bracket(f1,g1)
-    #print(b1(x_interest) - b2(x_interest))
     print(np.sum(b1(x_interest,0) - b2(x_interest,0),axis=1))
-    #print((b1(x_interest)))
-    
-    #
-    #plot_fields()
 #%%
 #Specific examples here

@@ -19,6 +19,8 @@ sys.path.append('../src')
 from lie_lib import *
 import networkx as nx
 import pdb
+import mayavi
+import lie_plots as lip
 
 #if __name__ == '__main__':
 @operable
@@ -46,11 +48,11 @@ def f6(x):
     return -np.array([x[0],x[1],x[2]])
 
 @operable
-def f7(x):
+def f7(x,args):
     return -np.array([x[0]**3 - 4*x[0]**2,x[2]**3 - 2*x[1]**2,x[1]**3 - 3*x[2]])
 
 @operable
-def f8(x):
+def f8(x,args):
     return -np.array([x[1] * x[2],x[2] * (1.0 + x[1] - x[2]),x[1] * (-1.0 + x[2] + x[1])])
 
 class f_net:
@@ -113,11 +115,11 @@ def simple_control_example():
     
     coords = (x,y,z)
     
-    dyn_field = drift([x,y,z])
-    plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
+    dyn_field = drift([x,y,z],[0])
+    lip.plot_field(dyn_field,coords,normfield=False,color=(1.0,0.0,0.0))
     
-    ctrl_field = control([x,y,z])
-    plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
+    ctrl_field = control([x,y,z],[0])
+    lip.plot_field(ctrl_field,coords,normfield=False,color=(0.0,0.0,1.0))
     
     #We do a Lie dot product
     y_dot = L_dot(control,drift,order=1)

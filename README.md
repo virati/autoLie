@@ -1,5 +1,5 @@
 # autoLie
-
+![Overview of Lie Analyses](imgs/lie_analysis.png)
 A simple library for doing Lie derivatives and brackets using autograd-compatible functions
 
 ## Installation
