@@ -1,10 +1,20 @@
 # autoLie
+A library built on top of autograd that enables Lie derivatives and brackets on arbitrary numpy functions
+
 ![Overview of Lie Analyses](imgs/lie_analysis.png)
-A simple library for doing Lie derivatives and brackets using autograd-compatible functions
 
-## Installation
+Setting up a network of regions, each with its own dynamics, in order to do Lie-based analysis that can tell us the optimal readout and optimal control locations given a predefinec objective function.
+For a more detailed mathematical treatment head on over to the [overview notebook]()
 
-Do the standard thing. Point yourselves towards the main file "lie_lib.py"
+# Installation
+
+Do the standard thing. Point yourselves towards the main file "lie_lib.py" and add it to your path. From there, import the primary classes and methods
+
+> from lie_lib import *
+> from dyn_lib import *
+
+lie_lib is the main library for lie analyses.
+dyn_lib is the main library for various dynamics functions
 
 ## Required Libraries
 We use autograd, numpy, and mayavi to have the whole package running.
