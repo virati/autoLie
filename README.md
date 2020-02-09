@@ -11,6 +11,7 @@ For a more detailed mathematical treatment head on over to the [overview noteboo
 Do the standard thing. Point yourselves towards the main file "lie_lib.py" and add it to your path. From there, import the primary classes and methods
 
 > from lie_lib import *
+
 > from dyn_lib import *
 
 lie_lib is the main library for lie analyses.
