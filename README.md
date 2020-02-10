@@ -20,11 +20,15 @@ dyn_lib is the main library for various dynamics functions
 ## Required Libraries
 We use autograd, numpy, and mayavi to have the whole package running.
 
+
+## More math details
+For more details of the math behind Lie Controllability and autoLie, head on over to the [Jupyter Notebook](notebooks/Lie_Controllability.ipynb)
+
 ## Jump into hands-on
 Run interact_lie.py to start seeing how vector fields interact with each other.
 This script builds off of the autoLie library with an interactive GUI frontend to tweak with certain parameters and observe the effects on a dynamics field immediately.
 
-## Example
+## Examples and pretty pictures
 Below is a simple example using two vector-valued functions $f$ and $g$
 
 The vector fields are seen as quivers and the lie-derivative calculated at each point of the meshgrid is seen as spheres/point3d dots.
@@ -37,7 +41,7 @@ Another example, this one with the rotational components of a dynamics field a l
 
 Check out example notebook [here]()
 
-## Dynamics
+## Controls by Analogy
 Dynaics is the study of change.
 Imagine standing somewhere in the city you live.
 Where are you going to be in one minute?
