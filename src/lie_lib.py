@@ -76,25 +76,6 @@ def f_points(f,args,epsilon=1):
     return output
 
 
-#%%
-# Misc stuff here
-
-def gen_meshgrid(dens=20):
-    x_ = np.linspace(-10,10,dens)
-    y_ = np.linspace(-10,10,dens)
-    z_ = np.linspace(-10,10,dens)
-    
-    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
-    
-    return x,y,z
-
-def gen_arbgrid(dims=4,dens=20):
-    X = np.array([np.linspace(-10,10,dens) for aa in np.arange(dims)])
-    grid = np.meshgrid(X,indexing='ij')
-    
-    return grid
-
-
 #%% Unit test
 if __name__=='__main__':
     x_interest = np.array([1.0,-2.0,3.0]).T

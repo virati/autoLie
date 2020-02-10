@@ -60,7 +60,7 @@ def plot_fields(dyn_field,ctrl_field,coords,normfield=False):
 def plot_LD(func,normalize=False,dens=10):
     x,y,z = gen_meshgrid(dens)
     
-    potgrid = func([x,y,z])
+    potgrid = func([x,y,z],[0])
     
     #plt.figure()
     #plt.pcolormesh(X,Y)
@@ -96,4 +96,20 @@ def plot_Ldot(func,D=[],normed=True):
     else:
         obj = points3d(x, y, z, (np.sum(potgrid,axis=0)),scale_factor=0.01,opacity=1)
 
+#%%
+# Misc stuff here
 
+def gen_meshgrid(dens=20):
+    x_ = np.linspace(-10,10,dens)
+    y_ = np.linspace(-10,10,dens)
+    z_ = np.linspace(-10,10,dens)
+    
+    x,y,z = np.meshgrid(x_,y_,z_,indexing='ij')
+    
+    return x,y,z
+
+def gen_arbgrid(dims=4,dens=20):
+    X = np.array([np.linspace(-10,10,dens) for aa in np.arange(dims)])
+    grid = np.meshgrid(X,indexing='ij')
+    
+    return grid
