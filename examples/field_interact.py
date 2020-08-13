@@ -55,6 +55,10 @@ def f7(x,args):
 def f8(x,args):
     return -np.array([x[1] * x[2],x[2] * (1.0 + x[1] - x[2]),x[1] * (-1.0 + x[2] + x[1])])
 
+@operable
+def f9(x,args):
+    return -np.array([1.0*x[2],x[0],-1.0 * x[1]**2])
+
 class f_net:
     def __init__(self,D):
         self.D = D
@@ -102,7 +106,7 @@ def network_dynamics_example():
 
 def simple_control_example():
     drift = f7
-    control = f8
+    control = f9
     
     #print('Dynamics: ' + )
     mayavi.mlab.figure(bgcolor=(0.0,0.0,0.0))
@@ -123,7 +127,7 @@ def simple_control_example():
     
     #We do a Lie dot product
     y_dot = L_dot(control,drift,order=1)
-    plot_LD(y_dot,normalize=True)
+    lip.plot_LD(y_dot,normalize=True)
     
 
 def simple_dynamics_example():
@@ -160,6 +164,8 @@ def simple_trajectory():
     #plt.plot(x_next[:,2])
     
 def vector_example():
+    f = f8
+    g = f4
     y_dot = L_d(g,f,order=1)
     
     x_ = np.linspace(-10,10,20)
@@ -173,8 +179,8 @@ def vector_example():
     dyn_field = f([x,y,z])
     ctrl_field = g([x,y,z])
     
-    plot_fields(dyn_field,ctrl_field,coords,normfield=True)
-    #plot_Ldot(y_dot)
+    lip.plot_fields(dyn_field,ctrl_field,coords,normfield=True)
+    lip.plot_Ldot(y_dot)
 
 def scalar_example():
     x_0 = np.array([1.,2.,5.])
@@ -194,6 +200,7 @@ def scalar_example():
     obj = quiver3d(x,y,z,dyn_field[0,:,:,:],dyn_field[1,:,:,:],dyn_field[2,:,:,:])
     obj2 = points3d(x,y,z,read_field[:,:,:],colormap='seismic',scale_factor=0.01)
     #plot_LD(y_dot)
+    L_dot()
 
 
 #%%
@@ -205,4 +212,5 @@ if __name__ == '__main__':
     
     # EXAMPLE 2
     simple_control_example()
+    #vector_example()
     mlab.show()

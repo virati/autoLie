@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 #H=nx.Graph();H.add_edge('a','b');H.add_edge('a','c');H.add_edge('a','d')
 #H=nx.grid_2d_graph(4,5)
 #H=nx.cycle_graph(20)
-H = nx.erdos_renyi_graph(16,0.2)
+H = nx.erdos_renyi_graph(20,0.3)
 
 L = np.abs(nx.laplacian_matrix(H)).todense()
 
@@ -52,7 +52,15 @@ plt.imshow(L)
 plt.title('True Laplacian')
 
 #%%
-def render_graph(H):
+def plot_graph():
+    G = nx.erdos_renyi_graph(7, 0.2)
+    plt.figure()
+    nx.draw(G)
+
+plot_graph()
+#%%
+    
+def render_graph(H,read,write):
     # reorder nodes from 0,len(G)-1
     G=nx.convert_node_labels_to_integers(H)
     # 3d spring layout
@@ -71,12 +79,29 @@ def render_graph(H):
                         scale_mode='none',
                         colormap='Blues',
                         resolution=20)
+    pts_reads = mlab.points3d(xyz[read,0], xyz[read,1], xyz[read,2],
+                    scalars[read],
+                    scale_factor=0.1,
+                    scale_mode='none',
+                    color=(0.0,1.0,0.0),
+                    resolution=20)
+    pts_reads = mlab.points3d(xyz[write,0], xyz[write,1], xyz[write,2],
+                scalars[write],
+                scale_factor=0.1,
+                scale_mode='none',
+                color=(1.0,0.0,0.0),
+                resolution=20)
+    
     
     pts.mlab_source.dataset.lines = np.array(G.edges())
     tube = mlab.pipeline.tube(pts, tube_radius=0.01)
     mlab.pipeline.surface(tube, color=(0.8, 0.8, 0.8),opacity=0.1)
     
     mlab.savefig('mayavi2_spring.png')
-    mlab.show() # interactive window
+    #mlab.show() # interactive window
     
-render_graph(H)
+read = np.zeros((20,)).astype(np.bool)
+write = np.zeros((20,)).astype(np.bool)
+read[2] = True
+write[5] = True
+render_graph(H,read,write)
