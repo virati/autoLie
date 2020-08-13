@@ -42,20 +42,21 @@ Another example, this one with the rotational components of a dynamics field a l
 Check out example notebook [here]()
 
 ## Controls by Analogy
-Dynaics is the study of change.
+Dynamics is the study of change.
 Imagine standing somewhere in the city you live.
 Where are you going to be in one minute?
 
 Well, it depends.
-Where are you going?
-What's the quickest way to get there?
-What vehicle are you in?
+Where are you going (target)?
+What's the quickest way to get there (optimal trajectory)?
+Quick meaning time or quick meaning distance (objective function)?
+What vehicle are you in (controller)?
 
-Diving into dynamics can be difficult.
-Different types of dynamics can be visualized in different ways.
-We'll stick with 3d dynamics and start with a simple field
+To help visualize how dynamics and control interact this library has a set of 3D tools.
+We can work with dynamics of various forms (linear, rotational, etc.) and see how various control couplings interact with these dynamics.
 
 ![A linear field with no rotation](imgs/f_field.png)
+A Linear field with no rotation
 
-Moving to something a bit more complicated, we'll focus on a field with rotational dynamics
 ![A rotational field](imgs/2.png)
+A rotational field
