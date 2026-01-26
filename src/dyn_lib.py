@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Sat Apr 27 19:00:17 2019
+Dynamics library - predefined dynamical functions
 
 @author: virati
+Vineet Tiruvadi
+virati@gmail.com
 """
 
 import autograd.numpy as np

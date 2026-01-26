@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Tue Dec 11 10:47:58 2018
+Lie Derivatives on predefined operators
 
 @author: virati
 Vineet Tiruvadi
 virati@gmail.com
-
-
-Lie Derivatives on predefined operators
 """
 
-from __future__ import division
 import autograd.numpy as np
 import autograd.numpy.random as npr
 from autograd.test_util import check_grads
@@ -24,6 +19,7 @@ from dyn_lib import *
 from op_plus import *
 
 import pdb
+
 npr.seed(1)
         
 # The Lie Magic goes here!

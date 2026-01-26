@@ -1,7 +1,52 @@
 [project]
 name = "autolie"
 version = "0.1.0"
-description = "Add your description here"
+description = "A library built on top of autograd that enables Lie derivatives and brackets on arbitrary numpy functions"
 readme = "README.md"
+authors = [
+    {name = "Vineet Tiruvadi", email = "virati@gmail.com"}
+]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "autograd>=1.6.2",
+    "numpy>=1.26.0,<2.0",
+    "scipy>=1.11.0",
+    "matplotlib>=3.8.0",
+    "networkx>=3.2.0",
+    "pyvista>=0.43.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.3.0",
+    "pytest>=8.0.0",
+    "ipython>=8.20.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+]
+ignore = [
+    "E501", # line too long (handled by formatter)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
