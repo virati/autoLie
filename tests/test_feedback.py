@@ -80,3 +80,63 @@ def test_involutivity():
     X = operable(lambda x, a: anp.array([1.0, 0.0, -x[1]]))
     Y = operable(lambda x, a: anp.array([0.0, 1.0, x[0]]))
     assert not is_involutive([X, Y], anp.array([0.3, -0.2, 0.1]))
+
+
+# --- normal form, zero dynamics, MIMO -------------------------------------------
+
+from autolie.feedback import (  # noqa: E402
+    decoupling_matrix,
+    mimo_closed_loop,
+    mimo_linearizing_control,
+    normal_coordinates,
+    vector_relative_degree,
+    zero_dynamics,
+)
+
+
+def test_normal_coordinates_become_an_integrator_chain():
+    z = normal_coordinates(pend_f, pend_h, 2)
+    u = linearizing_control(pend_f, pend_g, pend_h, 2)
+    for _ in range(4):
+        p, v = rng.normal(size=2), rng.normal()
+        F = closed_loop(pend_f, pend_g, u)
+        zdot = L_d(z, F)(p, v)
+        assert zdot == pytest.approx([z(p, None)[1], v], rel=1e-9, abs=1e-9)
+
+
+def test_zero_dynamics_keep_the_output_at_zero():
+    # Chain system, y = x1 (degree 2). On {x1 = 0, x2 + x3^2 = 0} the zero
+    # dynamics field must not move either coordinate off zero.
+    h = operable(lambda x, a: x[0])
+    F0 = zero_dynamics(chain_f, chain_g, h, 2)
+    z = normal_coordinates(chain_f, h, 2)
+    for x3 in [0.4, -0.7, 1.3]:
+        p = anp.array([0.0, -(x3**2), x3])
+        assert z(p, None) == pytest.approx([0.0, 0.0], abs=1e-12)
+        assert L_d(z, F0)(p, None) == pytest.approx([0.0, 0.0], abs=1e-9)
+
+
+# Two inputs, two outputs: x1' = x2, x2' = -x1 + x2 x3 + u1 + x1 u2, x3' = -x3 + u2.
+mf = operable(lambda x, a: anp.array([x[1], -x[0] + x[1] * x[2], -x[2]]))
+mg = [
+    operable(lambda x, a: anp.array([0.0, 1.0, 0.0])),
+    operable(lambda x, a: anp.array([0.0, x[0], 1.0])),
+]
+mh = [operable(lambda x, a: x[0]), operable(lambda x, a: x[2])]
+
+
+def test_vector_relative_degree_and_decoupling_matrix():
+    p = anp.array([0.7, -0.2, 0.5])
+    assert vector_relative_degree(mf, mg, mh, p) == [2, 1]
+    # A = [[L_g1 x2, L_g2 x2], [L_g1 x3, L_g2 x3]] = [[1, x1], [0, 1]]
+    assert decoupling_matrix(mf, mg, mh, [2, 1], p).ravel() == pytest.approx([1.0, 0.7, 0.0, 1.0])
+
+
+def test_mimo_control_decouples_the_outputs():
+    u = mimo_linearizing_control(mf, mg, mh, [2, 1])
+    F = mimo_closed_loop(mf, mg, u)
+    for _ in range(4):
+        p, v = rng.normal(size=3), rng.normal(size=2)
+        # y1'' = v1 and y2' = v2, each from its own input alone.
+        assert L_d(mh[0], F, order=2)(p, v) == pytest.approx(v[0], rel=1e-9, abs=1e-9)
+        assert L_d(mh[1], F)(p, v) == pytest.approx(v[1], rel=1e-9, abs=1e-9)
