@@ -34,27 +34,50 @@ def L_bracket(f, g, args=[]):
     if args == []:
         return cf, cb
     else:
-        return np.sum(cf(args[0], args[1]) - cb(args[0], args[1]), axis=0)
+        # The products above are broadcast elementwise, J[i, j] * v[j]; the
+        # matrix-vector product is the sum over j. Summing over axis 0 (as this
+        # used to) gives sum_i J[i, j] v[j], which is not a bracket.
+        return np.sum(cf(args[0], args[1]) - cb(args[0], args[1]), axis=1)
 
 
-""" 
-The Lie Derivative is here
-This takes the gradient of d and dots it with f; with is technically L_f(d)
-"""
+def bracket_field(f, g):
+    """The vector field [f, g](x) = (df/dx) g(x) - (dg/dx) f(x), as an operable.
+
+    f and g take (x, args) and return arrays shaped like x (a single point).
+    This is L_bracket's convention; the control texts that write
+    [f, g] = (dg/dx) f - (df/dx) g get the negative, i.e. bracket_field(g, f).
+    """
+    Jf, Jg = jcb(f, 0), jcb(g, 0)
+    return operable(lambda x, args: np.dot(Jf(x, args), g(x, args)) - np.dot(Jg(x, args), f(x, args)))
+
+
+def _lie_once(h, f):
+    Jh = jcb(h, 0)
+    return operable(lambda x, args: np.dot(Jh(x, args), f(x, args)))
 
 
 def L_d(d, f, order=1):
-    d = [d]
-    for ii in range(order):
-        # d.append(np.dot(operable(egrad(c[ii],0)),f))
-        d.append(np.dot(operable(egrad(d[ii])), f))
+    """The Lie derivative L_f^order d: the rate of change of d along the flow of f.
 
-    return d[-1]
+    For a scalar d this is grad(d) . f; for a vector-valued d it is (dd/dx) f,
+    taken component by component. Higher orders apply it repeatedly, so
+    L_d(h, f, 2) is grad(L_f h) . f.
+
+    This used to multiply grad(d) by f elementwise and never sum, so a scalar
+    Lie derivative came back as the vector of its terms; and since autograd's
+    elementwise_grad differentiates the sum of a function's outputs, a vector
+    d got the gradient of its component sum in place of its Jacobian.
+    """
+    for _ in range(order):
+        d = _lie_once(d, f)
+    return d
 
 
 # %% UNCLEAR USAGE BELOW
 def L_dot(h, f, order=1):
-    return np.sum(L_d(h, f, order=order))
+    # np.sum of an operable is the operable itself, so sum inside the call.
+    Lh = L_d(h, f, order=order)
+    return operable(lambda x, args: np.sum(Lh(x, args)))
 
 
 # this is so wrong; why am I taking a GRADIENT to find the time-domain fixed pt?
